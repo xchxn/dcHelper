@@ -18,11 +18,12 @@ function Crawler() {
       .catch(error => {
         console.error(error);
       });
+      setTargetUrl("");
   };
 
   return (
     <div>
-      <h1 class="fifth">디시인사이드 갤러리 크롤링</h1>
+      <h1 class="fifth">크롤링</h1>
       <p class="link">예시 "https://gall.dcinside.com/board/lists/?id=dcbest" </p>
       <input class="inputBox" type='text' value={targetUrl} onChange={(e)=>setTargetUrl(e.target.value)} placeholder='url을 입력하세요'>
       </input>

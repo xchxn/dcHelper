@@ -22,7 +22,19 @@ export class MorphemeService {
                     throw error;
                     return;
                 }
-                console.log(JSON.stringify(res));
+                // console.log(JSON.stringify(res));
+                //해당 Json에서 명사류 태그만 db에 업데이트하는 부분 작성 필요
+                //체언-일반명사태그=> NNG
+                //사용자사전에 등록된 것도 체크
+                res.sentences.forEach((sentence) => {
+                    sentence.tokens.forEach((token) => {
+                      token.morphemes.forEach((morpheme) => {
+                        if (morpheme.tag === "NNG") {
+                          console.log(token.text.content); 
+                        }
+                      });
+                    });
+                  });
             }
         );
     }

@@ -10,10 +10,4 @@ export class Word {
 
   @Column()
   describe: string;
-
-  @Column()
-  tendency: string;
-
-  @Column()
-  gallery: string;
 }

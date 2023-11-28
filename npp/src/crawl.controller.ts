@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body} from '@nestjs/common';
-import { crawlService } from './crawl.service';
+import { CrawlService } from './crawl.service';
 
 @Controller('crawl')
 export class CrawlController {
 
-  constructor(private readonly crawlService: crawlService) {}
+  constructor(private readonly crawlService: CrawlService) {}
   @Post()
   crawling(@Body() data : {targetUrl : string} ): any {
     const targetUrl = data.targetUrl;

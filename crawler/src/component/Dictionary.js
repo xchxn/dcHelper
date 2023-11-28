@@ -21,9 +21,12 @@ function Dictionary() {
         console.error(error);
       });
      setWord("");
-    setDescribe("");
+     setDescribe("");
   };
 
+  //사용자 사전 목록을 받는 GET 필요
+  axios.get(`${apiUrl}`);
+  
   return (
     <div>
       <h1 class="fifth">디시인사이드 단어 사전 등록</h1>

@@ -3,7 +3,7 @@ import * as puppeteer from "puppeteer";
 import { MorphemeService } from './morpheme.service';
 
 @Injectable()
-export class crawlService {
+export class CrawlService {
     constructor(private readonly morphemeService: MorphemeService) {} //service추가
     // https://github.com/puppeteer/puppeteer
     async crawling(url: string): Promise<any> {

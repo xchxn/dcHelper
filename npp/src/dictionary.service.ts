@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as puppeteer from "puppeteer";
 
 @Injectable()
-export class dictionaryService {
+export class DictionaryService {
     async dictionary( word:string, describe:string ): Promise<any> {
         let host = "nlp.bareun.ai"
         let API_KEY = "koba-EHGL23A-DYYETGI-VN7X4ZA-2RZVHUA"
@@ -31,6 +31,9 @@ export class dictionaryService {
             let res2 = await dict.clear();
             console.log("clear() : " + JSON.stringify(res, null, 2));
         })();
+
+    }
+    async showDictionary() : Promise<any>{
 
     }
 }
