@@ -7,9 +7,6 @@ export class CrawlController {
   constructor(private readonly crawlService: CrawlService) {}
   @Post()
   crawling(@Body() data : {targetUrl : string} ): any {
-    const targetUrl = data.targetUrl;
-    console.log('Received input value:', targetUrl);
-
-    return this.crawlService.crawling(`${targetUrl}`);
+    return this.crawlService.crawling(data.targetUrl);
   }
 }

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body} from '@nestjs/common';
 import { AppService } from './app.service';
-import { crawlService } from './crawl.service';
+import { CrawlService } from './crawl.service';
 
 @Controller()
 export class AppController {

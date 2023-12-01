@@ -10,7 +10,10 @@ export class MorphemeService {
     private readonly wordRepository: Repository<Word>,
   ) { }
   //형태소를 추출해서 데이터베이스로 옮기는 서비스
-  async morpheme(text: string): Promise<any> {
+  async morpheme(text : string, view : number, recom : number): Promise<any> {
+    //특수문자 검사에 사용될 패턴
+    const specialCharactersPattern = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/;
+
     let host = "nlp.bareun.ai"
     let API_KEY = "koba-EHGL23A-DYYETGI-VN7X4ZA-2RZVHUA"
     let { LanguageServiceClient, Tagger, CustomDict } = require("bareun");
@@ -34,11 +37,17 @@ export class MorphemeService {
           sentence.tokens.forEach((token) => {
             token.morphemes.forEach((morpheme) => {
               if (morpheme.tag === "NNG") {
-                console.log(token.text.content);
-                //db에서 token.text.content 검색
-                //없으면 추가, 있으면 특정 값 +1
-                //entity에서 값 처리할 수 있도록
-                this.updateCount(token.text.content);
+                if(specialCharactersPattern.test(token.text.content)){
+                  console.log(token.text.content + "특수문자감지");
+                }
+                else{
+                  console.log(token.text.content);
+                  //db에서 token.text.content 검색
+                  //없으면 추가, 있으면 특정 값 +1
+                  //entity에서 값 처리할 수 있도록
+                  this.updateCount(token.text.content, view , recom);
+                } 
+                
               }
             });
           });
@@ -48,22 +57,35 @@ export class MorphemeService {
   }
 
   //단어를 업데이트하는 함수
-  async updateCount(targetWord: string): Promise<any> {
+  async updateCount(targetWord: string, viewCount : number, recommend : number): Promise<any> {
     const existingWord = await this.wordRepository.findOne({
       where: { word: targetWord },
     });
+    //이미 존재하는 단어
     if (existingWord) {
       //count값 1늘리는 코드
       existingWord.count += 1;
       await this.wordRepository.save(existingWord);
     }
+    //새로운 단어
     else {
+      const trend = this.calTrendPoint(viewCount,recommend);
       const newWord = this.wordRepository.create({
         word: targetWord,
-        count: 1,
+        trendPoint: 1,
       });
       await this.wordRepository.save(newWord);
     }
   }
 
+  //트렌드포인트를 돌려주는 함수
+  async findAll(): Promise<Word[]> {
+    return this.wordRepository.find( { order: { trendPoint: 'DESC' } } );
+  }
+  
+  async calTrendPoint(number1:number, number2:number):Promise<number>{
+    let tp :number = 0;
+    tp = number1*0.25 + number2*0.33;
+    return tp;
+  }
 }

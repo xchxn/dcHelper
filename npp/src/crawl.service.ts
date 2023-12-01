@@ -1,21 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { Puppeteer } from "puppeteer";
 import * as puppeteer from "puppeteer";
 import { MorphemeService } from './morpheme.service';
 
 @Injectable()
 export class CrawlService {
-    constructor(private readonly morphemeService: MorphemeService) {} //service추가
-    // https://github.com/puppeteer/puppeteer
+    constructor(private readonly morphemeService: MorphemeService) { }
     async crawling(url: string): Promise<any> {
         const puppeteer = require('puppeteer');
         const cheerio = require('cheerio');
         const fs = require('fs');
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
-        
+
+        console.log(`수신 url: ${url}`);
         //링크 담을 배열
-        let arr = [];
-        let arrTxt = [];
+        let arr : Array<string> = [];
+        let arrTxt : Array<string> = [];
 
         for (let pageIdx = 1; pageIdx < 2; pageIdx++) {
             //페이지 이동
@@ -26,25 +27,22 @@ export class CrawlService {
             const $ = cheerio.load(content);
             // 복사한 리스트의 Selector로 리스트를 모두 가져온다.
             // Selector는 웹에서 개발자모드 요소 검사를 통해 복사할 수 있음
-            const lists = $(".gall_tit.ub-word a:nth-child(1)");
+            const lists = $(".ub-content.us-post");
             // 모든 리스트를 순환한다.
-            lists.each((index: number, element: string) => {
-                const link = $(element).attr('href'); // 링크 가져오기
-                const text = $(element).text(); // 텍스트 가져오기
-                //배열에 링크 추가
-                if (index !== 0) {
-                    arr.push(`${link}`);
-                    arrTxt.push(`${text}`);
-                    // morphemeService 호출
-                this.morphemeService.morpheme(`${text}`);
-                }
+            lists.each((index: number, element: any) => {
+                console.log(`Index: ${index}`);
+                const link : string = $(element).find('.gall_tit a').attr('href'); // 링크 가져오기
+                const text : string = $(element).find('.gall_tit a').text(); // 텍스트 가져오기
+                const viewCount : number = parseInt($(element).find('.gall_count').text(), 10); // 조회수
+                const recommend : number = parseInt($(element).find('.gall_recommend').text(), 10); // 추천수
+                // morphemeService 호출
+                this.morphemeService.morpheme(`${text}`,viewCount,recommend);
                 //콘솔에 출력
-                console.log(`Index: ${index}, Link: ${link}, Text: ${text}`);
+                console.log(`Link: ${link}, Text: ${text}, view: ${viewCount}, recommend: ${recommend}`);
             });
-
         }
         await browser.close();
 
-        return { arrTxt };
+        return {};
     }
 }

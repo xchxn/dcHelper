@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 function Crawler() {
   const [targetUrl, setTargetUrl] = useState("");
   const [data,setData] = useState([]);
+  const [trend, setTrend] = useState([]);
   const apiUrl = 'http://localhost:3001/crawl'; // NestJS 서버 주소
 
   // 데이터 가져오기
@@ -14,11 +15,17 @@ function Crawler() {
       .then(response => {
         setData(response.data);
         console.log(response.data);
+        //post후 트렌드까지 읽어오기
+        // axios.get(`${apiUrl}`)
+        //   .then(response2 => {
+        //       setTrend(response2.data);
+        //       console.log(response2.data);
+        //     })
       })
       .catch(error => {
         console.error(error);
       });
-      setTargetUrl("");
+      // setTargetUrl("");
   };
 
   return (
