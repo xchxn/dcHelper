@@ -9,12 +9,11 @@ export class MorphemeController {
 
   @Post()
   morpheme(@Body() data : {text : string, view : number, recom : number} ): any {
-    
     return this.morphemeService.morpheme(data.text , data.view, data.recom);
   }
 
   @Get()
-  async findAll(): Promise<Word[]> {
+  findAll(): Promise<Word[]> {
     return this.morphemeService.findAll();
   }
 }

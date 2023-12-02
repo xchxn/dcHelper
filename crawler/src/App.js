@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navigation from './component/Navigation';
 import Crawler from './component/Crawler';
 import Dictionary from './component/Dictionary';
+import WordClouding from './component/WordClouding';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/"/>
         <Route path="/Crawler" element={<Crawler />}/>
         <Route path="/Dictionary" element={<Dictionary />}/>
+        <Route path="/WordClouding" element={<WordClouding />}/>
       </Routes >
     </Router>
   );

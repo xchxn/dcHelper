@@ -28,6 +28,9 @@ export class CrawlService {
             // 복사한 리스트의 Selector로 리스트를 모두 가져온다.
             // Selector는 웹에서 개발자모드 요소 검사를 통해 복사할 수 있음
             const lists = $(".ub-content.us-post");
+
+            //테이블 초기화
+            this.morphemeService.clearTable();
             // 모든 리스트를 순환한다.
             lists.each((index: number, element: any) => {
                 console.log(`Index: ${index}`);
@@ -35,13 +38,17 @@ export class CrawlService {
                 const text : string = $(element).find('.gall_tit a').text(); // 텍스트 가져오기
                 const viewCount : number = parseInt($(element).find('.gall_count').text(), 10); // 조회수
                 const recommend : number = parseInt($(element).find('.gall_recommend').text(), 10); // 추천수
+                const subject : string = $(element).find('.gall_subject b').text(); // 게시글 주제
+                if(!["공지", "설문", "뉴스"].includes(subject)){
                 // morphemeService 호출
-                this.morphemeService.morpheme(`${text}`,viewCount,recommend);
+                    this.morphemeService.morpheme(`${text}`,viewCount,recommend);
+                }
                 //콘솔에 출력
                 console.log(`Link: ${link}, Text: ${text}, view: ${viewCount}, recommend: ${recommend}`);
             });
         }
         await browser.close();
+        
 
         return {};
     }

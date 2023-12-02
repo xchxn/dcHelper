@@ -42,9 +42,7 @@ export class MorphemeService {
                 }
                 else{
                   console.log(token.text.content);
-                  //db에서 token.text.content 검색
-                  //없으면 추가, 있으면 특정 값 +1
-                  //entity에서 값 처리할 수 있도록
+                  //단어 처리
                   this.updateCount(token.text.content, view , recom);
                 } 
                 
@@ -58,6 +56,7 @@ export class MorphemeService {
 
   //단어를 업데이트하는 함수
   async updateCount(targetWord: string, viewCount : number, recommend : number): Promise<any> {
+    const trend = calTrendPoint(viewCount,recommend);
     const existingWord = await this.wordRepository.findOne({
       where: { word: targetWord },
     });
@@ -65,27 +64,33 @@ export class MorphemeService {
     if (existingWord) {
       //count값 1늘리는 코드
       existingWord.count += 1;
+      existingWord.trendPoint += trend;
       await this.wordRepository.save(existingWord);
     }
     //새로운 단어
     else {
-      const trend = this.calTrendPoint(viewCount,recommend);
       const newWord = this.wordRepository.create({
         word: targetWord,
-        trendPoint: 1,
+        count: 1,
+        trendPoint: trend,
       });
       await this.wordRepository.save(newWord);
     }
   }
 
-  //트렌드포인트를 돌려주는 함수
+  //DB에서 트렌드포인트를 찾아오는 함수
   async findAll(): Promise<Word[]> {
-    return this.wordRepository.find( { order: { trendPoint: 'DESC' } } );
+    //내림차순으로 정렬 후 상위 10개 단어 반환
+    return this.wordRepository.find( { order: { trendPoint: 'DESC' }, take: 10 } );
   }
   
-  async calTrendPoint(number1:number, number2:number):Promise<number>{
-    let tp :number = 0;
-    tp = number1*0.25 + number2*0.33;
-    return tp;
+  //테이블 비우는 함수
+  async clearTable(): Promise<Word[]> {
+    return this.wordRepository.find( { order: { trendPoint: 'DESC' } } );
   }
+}
+//트렌드포인트 계산하는 함수
+function calTrendPoint(number1: number, number2: number): number{
+  let tp : number = number1*0.25 + number2*0.33;
+  return tp;
 }

@@ -14,6 +14,9 @@ function Navigation() {
         <li>
           <Link to="/Dictionary">Dictionary</Link>
         </li>
+        <li>
+          <Link to="/WordClouding">WordClouding</Link>
+        </li>
       </ul>
     </nav>
   );

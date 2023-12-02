@@ -5,11 +5,8 @@ export class Word {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  word: string;
-
   @Column()
-  describe: string;
+  word: string;
 
   @Column()
   count: number;
