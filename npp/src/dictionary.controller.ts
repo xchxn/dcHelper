@@ -1,20 +1,17 @@
 import { Controller, Get, Post, Body} from '@nestjs/common';
 import { DictionaryService } from './dictionary.service';
+import { Dict } from './entities/dict.entity';
 
 @Controller('dictionary')
 export class DictionaryController {
 
   constructor(private readonly dictionaryService: DictionaryService) {}
   @Post()
-  dictionary(@Body() data : {word:string, describe:string} ): any {
-    const word = data.word;
-    console.log('Received input value:', word+": "+describe);
-
-    return this.dictionaryService.dictionary(data.word, data.describe);
+  dictionary(@Body() data : {word:string, description :string} ): any {
+    return this.dictionaryService.dictionary(data.word, data.description);
   }
   @Get()
-  showDictionary(@Body() data:{}): any {
-
+  showDictionary(): Promise<Dict[]> {
     return this.dictionaryService.showDictionary();
   }
 }

@@ -38,8 +38,9 @@ export class CrawlService {
                 const text : string = $(element).find('.gall_tit a').text(); // 텍스트 가져오기
                 const viewCount : number = parseInt($(element).find('.gall_count').text(), 10); // 조회수
                 const recommend : number = parseInt($(element).find('.gall_recommend').text(), 10); // 추천수
-                const subject : string = $(element).find('.gall_subject b').text(); // 게시글 주제
-                if(!["공지", "설문", "뉴스"].includes(subject)){
+                const subject : string = $(element).find('.gall_subject b').text();
+                const gallnumber : string = $(element).find('.gall_num').text(); // 게시글 주제
+                if(!["공지", "설문", "뉴스"].includes(subject) && !["공지", "설문", "뉴스"].includes(gallnumber)){
                 // morphemeService 호출
                     this.morphemeService.morpheme(`${text}`,viewCount,recommend);
                 }

@@ -1,7 +1,7 @@
 import '../App.css';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import WordClouding from './WordClouding';
+import D3WordCloudComponent from './WordClouding';
 
 function Crawler() {
   const [targetUrl, setTargetUrl] = useState("");
@@ -59,7 +59,9 @@ function Crawler() {
         {isLoading ? (
         <p>Loading...</p> // 로딩 중일 때 보여줄 내용
       ) : (
-        <WordClouding items={trend} />
+        <div style={{ height: '500px' }}>
+          <D3WordCloudComponent items={trend} />
+        </div>
       )}
     </div>
   );
