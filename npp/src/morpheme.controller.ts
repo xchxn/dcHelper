@@ -14,6 +14,7 @@ export class MorphemeController {
 
   @Get()
   findAll(): Promise<Word[]> {
+    console.log("morpheme get")
     return this.morphemeService.findAll();
   }
 }

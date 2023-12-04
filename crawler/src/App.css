@@ -38,22 +38,33 @@
 }
 
 .button {
+  text-align: center;
   background-color:#0a0a23;
   color: #fff;
-  margin-left: 10px;
+  margin-left: 5%;
   border-radius: 5px;
 }
 .button:hover {
   background-color:#8f8fd3;
   color: #fff;
-  margin-left: 10px;
+  margin-left: 5%;
+  
 }
-
+.textBox{
+  text-align: center;
+  margin: 2px 1px;
+  padding: 5px 5px;
+  background-color:#dddddd;
+  width: 150px;
+  border-radius: 15px;
+  display:inline-block;
+}
 .inputBox {
+  text-align: center;
   margin-left: 5%;
   padding: 10; 
   border-color: #453a97;
-  border-radius: 15px;
+  border-radius: 5px;
   border-width: 5px;
 }
 
@@ -62,11 +73,40 @@ p.link {
 }
 
 h1.fifth {
-  background-color: #61dafb;
+  background-color: #4b59a7;
+  color:#fff;
   padding: 10px;
   font-weight: 400;
   text-shadow: 
-    1px 1px 0
-    rgb(84, 84, 84);
+    2px 2px 0
+    rgb(0, 0, 0);
   transition: all 0.2s ease;
+} 
+
+#nav2>ul {
+  float: right;
+}
+#nav2>ul li {
+  float: right;
+  padding: 0 30px;
+  margin-top: 5%;
+  display: block; /* a태그는 글자성격 = inline */
+  font-size: 15px;
+  font-weight: 900;
+  color: #dbdbdb;
+}
+#wordTable>ul {
+  float: right;
+}
+#wordTable>ul li{
+  float: right;
+}
+.wordTable{
+  background-color: #e1e1e1;
+  border-radius: 5px;
+  
+}
+
+.container{
+  border: 2px solid;
 }

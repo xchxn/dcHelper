@@ -10,13 +10,12 @@ export class CrawlService {
         const puppeteer = require('puppeteer');
         const cheerio = require('cheerio');
         const fs = require('fs');
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({headless: "new"});
         const page = await browser.newPage();
-
+        
         console.log(`수신 url: ${url}`);
-        //링크 담을 배열
-        let arr : Array<string> = [];
-        let arrTxt : Array<string> = [];
+        //미리 테이블 초기화
+        this.morphemeService.clearTable();
 
         for (let pageIdx = 1; pageIdx < 2; pageIdx++) {
             //페이지 이동
@@ -29,10 +28,8 @@ export class CrawlService {
             // Selector는 웹에서 개발자모드 요소 검사를 통해 복사할 수 있음
             const lists = $(".ub-content.us-post");
 
-            //테이블 초기화
-            this.morphemeService.clearTable();
             // 모든 리스트를 순환한다.
-            lists.each((index: number, element: any) => {
+            lists.each( async(index: number, element: any) => {
                 console.log(`Index: ${index}`);
                 const link : string = $(element).find('.gall_tit a').attr('href'); // 링크 가져오기
                 const text : string = $(element).find('.gall_tit a').text(); // 텍스트 가져오기
@@ -42,15 +39,14 @@ export class CrawlService {
                 const gallnumber : string = $(element).find('.gall_num').text(); // 게시글 주제
                 if(!["공지", "설문", "뉴스"].includes(subject) && !["공지", "설문", "뉴스"].includes(gallnumber)){
                 // morphemeService 호출
-                    this.morphemeService.morpheme(`${text}`,viewCount,recommend);
+                    await this.morphemeService.morpheme(`${text}`,viewCount,recommend);
                 }
                 //콘솔에 출력
                 console.log(`Link: ${link}, Text: ${text}, view: ${viewCount}, recommend: ${recommend}`);
             });
         }
         await browser.close();
-        
 
-        return {};
+        return ("done");
     }
 }

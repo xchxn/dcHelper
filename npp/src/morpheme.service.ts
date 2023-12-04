@@ -17,10 +17,9 @@ export class MorphemeService {
     let API_KEY = "koba-EHGL23A-DYYETGI-VN7X4ZA-2RZVHUA";
     let { LanguageServiceClient, Tagger, CustomDict } = require("bareun");
     let language_service_client = new LanguageServiceClient(host, API_KEY);
-    let dict = new CustomDict("game", host, undefined, API_KEY);
     //crawl서비스마다 morpheme서비스가 수행
     //crawl에서 보내지는 text를 형태소 분석하여 명사를 데이터베이스로 보내는 작업 수행
-    language_service_client.AnalyzeSyntax(`${word}`,"game", (error, res) => {
+    language_service_client.AnalyzeSyntax(`${word}`, (error, res) => {
         console.log('result : language_service_client.AnalyzeSyntax(text)');
         if (error) {
           throw error;
@@ -46,17 +45,17 @@ export class MorphemeService {
             });
           });
         });
-      }
-    );
+      });
   }
+  
 
   //단어를 업데이트하는 함수
   async updateCount(targetWord: string, viewCount: number, recommend: number): Promise<any> {
     const trend = calTrendPoint(viewCount, recommend);
     const existingWord = await this.wordRepository.findOne({where: { word: targetWord }} );
     if (existingWord) {
-      existingWord.count += 1;
-      existingWord.trendPoint += trend;
+      existingWord.count = existingWord.count +1;
+      existingWord.trendPoint = existingWord.trendPoint + trend;
     await this.wordRepository.save(existingWord);
     }
     else{
@@ -71,8 +70,8 @@ export class MorphemeService {
 
   //DB에서 트렌드포인트를 찾아오는 함수
   async findAll(): Promise<Word[]> {
-    //내림차순으로 정렬 후 상위 10개 단어 반환
-    return this.wordRepository.find({ order: { trendPoint: 'DESC' }, take: 20 });
+      const getTrend = this.wordRepository.find({ order: { trendPoint: 'DESC' }, take: 20 });
+      return getTrend;
   }
 
   //테이블 비우는 함수
@@ -80,6 +79,7 @@ export class MorphemeService {
     this.wordRepository.clear();
     return;
   }
+  
 }
 //트렌드포인트 계산하는 함수
 function calTrendPoint(number1: number, number2: number): number {

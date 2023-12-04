@@ -1,24 +1,22 @@
-import WordCloud from 'react-d3-cloud';
-import { scaleOrdinal } from 'd3-scale';
-import { schemeCategory10, schemePaired } from 'd3-scale-chromatic';
 import '../App.css';
-import { useCallback,useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import cloud from 'd3-cloud'
 import * as d3 from 'd3';
 import { createCanvas } from 'canvas';
 
 function D3WordCloudComponent( { items } ) {
     const wordCloudRef = useRef();
+    const canvasRef = useRef();
     useEffect(() => {
+      canvasRef.current = createCanvas(1, 1);
         const words = items.map(d=>({
             text: d.word,
-            size: 10 + Math.random() * 90,
+            size: d.trendPoint*1.33 + d.count,
             color: getRandomColor(),
          }));
-    
         cloud()
-          .size([960, 500])
-          .canvas(() => createCanvas(1, 1))
+          .size([600, 600])
+          .canvas(() => canvasRef.current)
           .words(words)
           .padding(5)
           .rotate(() => Math.floor(Math.random() * 2) * 90)
